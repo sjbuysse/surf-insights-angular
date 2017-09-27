@@ -7,13 +7,13 @@
   </defs>
 </svg>
 
-<div id="filter-drawer" class="filter-drawer filter-drawer--open">
-    <span class="filter-drawer__toggle">
+<div id="filter-drawer" class="filter-drawer" [ngClass]="showDrawer ? 'filter-drawer--open' : '' ">
+    <span class="filter-drawer__toggle" (click)="toggleDrawer()">
         <svg class="filter-drawer__toggle-icon"><use xlink:href="#icon-filter"></use></svg>
     </span>
     <input class="filter-drawer__searchbox" placeholder="Search for a place" />
     <ul class="filter-drawer__list" id="filter-list">
-      <li class="filter-drawer__list-item" *ngFor="let spot of surfspots | async">Kaas</li>
+      <li class="filter-drawer__list-item" *ngFor="let spot of surfspotList | async">{{spot.name}}</li>
     </ul>
     <button class="filter-drawer__export-btn">Export locations</button>
     <input type="file" name="file" id="file" class="filter-drawer__import-input" />
