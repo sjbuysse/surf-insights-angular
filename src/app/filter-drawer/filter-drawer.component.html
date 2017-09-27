@@ -13,7 +13,7 @@
     </span>
     <input class="filter-drawer__searchbox" placeholder="Search for a place" />
     <ul class="filter-drawer__list" id="filter-list">
-      <li class="filter-drawer__list-item">Kaas</li>
+      <li class="filter-drawer__list-item" *ngFor="let spot of surfspots | async">Kaas</li>
     </ul>
     <button class="filter-drawer__export-btn">Export locations</button>
     <input type="file" name="file" id="file" class="filter-drawer__import-input" />
