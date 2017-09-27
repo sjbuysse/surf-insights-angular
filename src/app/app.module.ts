@@ -4,10 +4,12 @@ import { NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
 
 import { AgmCoreModule } from '@agm/core';
+import { FilterDrawerComponent } from './filter-drawer/filter-drawer.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    FilterDrawerComponent
   ],
   imports: [
     BrowserModule,
