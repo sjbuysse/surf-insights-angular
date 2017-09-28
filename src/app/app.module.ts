@@ -10,7 +10,6 @@ import { AngularFireAuthModule } from 'angularfire2/auth';
 import { environment } from '../environments/environment';
 
 import { SurfspotService} from './surfspots/surfspot.service';
-import { StateService } from './state.service';
 
 import { FilterDrawerComponent } from './filter-drawer/filter-drawer.component';
 import { SurfspotComponent } from './surfspots/surfspot.component';
@@ -31,8 +30,7 @@ import { SurfspotComponent } from './surfspots/surfspot.component';
     AngularFireAuthModule, // imports firebase/auth
   ],
   providers: [
-    SurfspotService,
-    StateService
+    SurfspotService
   ],
   bootstrap: [AppComponent]
 })

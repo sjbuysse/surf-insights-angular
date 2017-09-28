@@ -1,6 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import {SurfspotService} from '../surfspots/surfspot.service';
-import { FirebaseObjectObservable } from 'angularfire2/database';
+import {Component, Input, OnInit} from '@angular/core';
+import {Surfspot} from './Surfspot';
 
 @Component({
   selector: 'si-surfspot',
@@ -8,8 +7,16 @@ import { FirebaseObjectObservable } from 'angularfire2/database';
   styleUrls: ['./surfspot.component.scss']
 })
 export class SurfspotComponent implements OnInit {
+  showPopup: boolean;
+  @Input()
+  activeSurfspot: Surfspot;
 
-  constructor(private _service: SurfspotService) {
+  constructor() {
+    this.showPopup = false;
+  }
+
+  togglePopup(): void {
+    this.showPopup = !this.showPopup;
   }
 
   ngOnInit() {

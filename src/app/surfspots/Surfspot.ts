@@ -1,4 +1,5 @@
-export interface Surfspot {
+export class Surfspot {
+  editing: boolean = false;
   id: number;
   info: string;
   name: string;

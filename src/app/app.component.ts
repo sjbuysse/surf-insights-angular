@@ -1,4 +1,5 @@
 import {Component, Input} from '@angular/core';
+import {Surfspot} from './surfspots/Surfspot';
 
 @Component({
   selector: 'si-root',
@@ -9,6 +10,9 @@ export class AppComponent {
   lat: number = 51.678418;
   lng: number = 7.809007;
 
-  @Input()
-  selectedSpot;
+  activeSurfspot: Surfspot;
+
+  setActiveSurfspot($event): void {
+    this.activeSurfspot = $event.spot;
+  }
 }

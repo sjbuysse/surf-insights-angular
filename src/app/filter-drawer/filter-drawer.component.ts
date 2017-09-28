@@ -1,8 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {SurfspotService} from '../surfspots/surfspot.service';
 import {Observable} from 'rxjs/Observable';
 import {Surfspot} from '../surfspots/Surfspot';
-import {StateService} from '../state.service';
 
 @Component({
   selector: 'si-filter-drawer',
@@ -13,7 +12,11 @@ export class FilterDrawerComponent implements OnInit {
   surfspotList: Observable<Surfspot[]>;
   showDrawer: boolean;
 
-  constructor(private _dataService: SurfspotService, private _stateService: StateService) {
+  @Output()
+  onSurfspotSelection: EventEmitter<any> = new EventEmitter();
+
+
+  constructor(private _dataService: SurfspotService) {
     this.showDrawer = false;
   }
 
@@ -21,8 +24,8 @@ export class FilterDrawerComponent implements OnInit {
     this.showDrawer = !this.showDrawer;
   }
 
-  setActiveSurfspot(surfspot: Surfspot): void {
-    this._stateService.setActiveSurfspot(surfspot);
+  setActiveSurfspot(spot: Surfspot): void {
+    this.onSurfspotSelection.emit({spot});
   }
 
   ngOnInit() {
