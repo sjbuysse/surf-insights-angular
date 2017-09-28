@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {SurfspotService} from '../surfspots/surfspot.service';
 import {Observable} from 'rxjs/Observable';
 import {Surfspot} from '../surfspots/Surfspot';
+import {StateService} from '../state.service';
 
 @Component({
   selector: 'si-filter-drawer',
@@ -12,7 +13,7 @@ export class FilterDrawerComponent implements OnInit {
   surfspotList: Observable<Surfspot[]>;
   showDrawer: boolean;
 
-  constructor(private _service: SurfspotService) {
+  constructor(private _dataService: SurfspotService, private _stateService: StateService) {
     this.showDrawer = false;
   }
 
@@ -20,8 +21,12 @@ export class FilterDrawerComponent implements OnInit {
     this.showDrawer = !this.showDrawer;
   }
 
+  setActiveSurfspot(surfspot: Surfspot): void {
+    this._stateService.setActiveSurfspot(surfspot);
+  }
+
   ngOnInit() {
-    this.surfspotList = this._service.fetchSurfspotList();
+    this.surfspotList = this._dataService.fetchSurfspotList();
   }
 
 }
