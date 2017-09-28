@@ -12,11 +12,13 @@ import { environment } from '../environments/environment';
 import { SurfspotService} from './surfspots/surfspot.service';
 
 import { FilterDrawerComponent } from './filter-drawer/filter-drawer.component';
+import { SurfspotComponent } from './surfspots/surfspot.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    FilterDrawerComponent
+    FilterDrawerComponent,
+    SurfspotComponent
   ],
   imports: [
     BrowserModule,

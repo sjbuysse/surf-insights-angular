@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {SurfspotService} from '../surfspots/surfspot.service';
-import { FirebaseListObservable, FirebaseObjectObservable } from 'angularfire2/database';
+import {Observable} from 'rxjs/Observable';
+import {Surfspot} from '../surfspots/Surfspot';
 
 @Component({
   selector: 'si-filter-drawer',
@@ -8,8 +9,7 @@ import { FirebaseListObservable, FirebaseObjectObservable } from 'angularfire2/d
   styleUrls: ['./filter-drawer.component.scss']
 })
 export class FilterDrawerComponent implements OnInit {
-  surfspots: FirebaseObjectObservable<any>;
-  surfspotList: FirebaseListObservable<any>;
+  surfspotList: Observable<Surfspot[]>;
   showDrawer: boolean;
 
   constructor(private _service: SurfspotService) {
@@ -21,9 +21,7 @@ export class FilterDrawerComponent implements OnInit {
   }
 
   ngOnInit() {
-    // this.surfspots = this._service.fetchSurfspots();
     this.surfspotList = this._service.fetchSurfspotList();
-    this.surfspotList.subscribe(user => console.log(user));
   }
 
 }

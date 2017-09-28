@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, Input} from '@angular/core';
 
 @Component({
   selector: 'si-root',
@@ -6,7 +6,9 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = 'app';
   lat: number = 51.678418;
   lng: number = 7.809007;
+
+  @Input()
+  selectedSpot;
 }
