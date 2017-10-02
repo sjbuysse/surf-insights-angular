@@ -3,6 +3,8 @@ export class Surfspot {
   id: number;
   info: string;
   name: string;
-  lat: number;
-  lng: number;
+  latlng: {
+    lat: number;
+    lng: number;
+  };
 }

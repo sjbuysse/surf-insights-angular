@@ -4,6 +4,12 @@
 <!--<agm-map [latitude]="lat" [longitude]="lng">-->
   <!--<agm-marker [latitude]="lat" [longitude]="lng"></agm-marker>-->
 <!--</agm-map>-->
-<si-filter-drawer (onSurfspotSelection)="setActiveSurfspot($event)"></si-filter-drawer>
+<si-filter-drawer
+  [surfspotList]="surfspotList"
+  (onSurfspotSelection)="setActiveSurfspotAndImageList($event)"></si-filter-drawer>
 <si-surfspot
-[activeSurfspot]="activeSurfspot"></si-surfspot>
+  (onSetEditing)="setEditing($event)"
+  (onCancelEditing)="cancelEditing()"
+  (onUpdate)="update()"
+  [activeSurfspotImageList]="activeSurfspotImageList"
+  [activeSurfspot]="activeSurfspot"></si-surfspot>

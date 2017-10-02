@@ -6,10 +6,11 @@
 export const environment = {
   production: false,
   firebase: {
-    apiKey: "AIzaSyDCYpUjurtGKHJ3mIpMik5_mLhRrVgM33E",
-    authDomain: "surf-sessions-7accd.firebaseapp.com",
-    databaseURL: "https://surf-sessions-7accd.firebaseio.com",
-    storageBucket: "surf-sessions-7accd.appspot.com",
-    messagingSenderId: "246363609320"
+    apiKey: 'AIzaSyCDVG3HkJSJ3BGcLCzAHJcMPXjRZKvPjJg',
+    authDomain: 'surf-insights-an-1506435316981.firebaseapp.com',
+    databaseURL: 'https://surf-insights-an-1506435316981.firebaseio.com',
+    projectId: 'surf-insights-an-1506435316981',
+    storageBucket: 'surf-insights-an-1506435316981.appspot.com',
+    messagingSenderId: '494555970415'
   }
 };

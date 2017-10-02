@@ -1,27 +1,27 @@
-<div class="popup" id="popup" [ngClass]="showPopup ? 'popup--open' : '' " >
+<div class="popup" id="popup" [ngClass]="showPopup ? 'popup--open' : '' " *ngIf="activeSurfspot" >
   <div class="popup__toggle popup__toggle-up" (click)="togglePopup()">Pop Up!</div>
   <div class="popup__toggle popup__toggle-down" (click)="togglePopup()">Pop Down!</div>
   <div class="info-wrapper">
     <div class="popup__info info" id="info-wrapper">
-      <button class="info__edit-btn" ></button>
-      <label class="info__name">{{activeSurfspot?.name }}</label>
-      <input class="info__name--edit" *ngIf="activeSurfspot?.editing" [value]="activeSurfspot?.name">
-             <!--(blur)="stopEditing()" (keyup.enter)="updateSurfspot()" (keyup.escape)="cancelEditing()" />-->
-      <label class="info__latlng">lat: <span ></span></label>
-      <label class="info__latlng">lng: <span ></span> </label>
-      <p class="info__details" ></p>
-      <textarea class='info__details--edit' ></textarea>
+      <button class="info__edit-btn" (click)="setEditing(true)"></button>
+      <label class="info__name" *ngIf="!activeSurfspot.editing" (dblclick)="setEditing(true)">{{activeSurfspot.name }}</label>
+      <input class="info__name--edit" *ngIf="activeSurfspot.editing" [(ngModel)]="activeSurfspot.name"
+        (keyup.enter)="update()" (keyup.escape)="cancelEditing()" />
+      <label class="info__latlng">lat: <span >{{activeSurfspot.latlng.lat}}</span></label>
+      <label class="info__latlng">lng: <span >{{activeSurfspot.latlng.lng}}</span> </label>
+      <p class="info__details" *ngIf="!activeSurfspot.editing" (dblclick)="setEditing(true)">{{activeSurfspot.info}}</p>
+      <textarea class='info__details--edit' *ngIf="activeSurfspot.editing" [(ngModel)]="activeSurfspot.info"
+      (keyup.enter)="update()" (keyup.escape)="cancelEditing()"></textarea>
       <div class="info__images images" id="image-wrapper">
         <h3 >Images</h3>
         <div class="line-break"></div>
-        <!-- ko foreach: images -->
-        <div class="images__image image">
-          <img class="image__pic"/>
-          <p class="image__caption" ></p>
-          <input class='image__caption--edit' />
+        <div class="images__image image" *ngFor="let image of activeSurfspotImageList">
+          <img class="image__pic" [src]="image.url"/>
+          <p class="image__caption" *ngIf="!activeSurfspot.editing" (dblclick)="setEditing(true)">{{image.caption}}</p>
+          <input class='image__caption--edit' *ngIf="activeSurfspot.editing" [(ngModel)]="image.caption"
+      (keyup.enter)="update()" (keyup.escape)="cancelEditing()"/>
           <button class="image__destroy-btn" ></button>
         </div>
-        <!-- /ko -->
       </div>
       <div class="info__upload-image upload-image">
         <h3>Add Image</h3>

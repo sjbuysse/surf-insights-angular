@@ -1,5 +1,4 @@
-import {Component, EventEmitter, OnInit, Output} from '@angular/core';
-import {SurfspotService} from '../surfspots/surfspot.service';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {Observable} from 'rxjs/Observable';
 import {Surfspot} from '../surfspots/Surfspot';
 
@@ -9,14 +8,15 @@ import {Surfspot} from '../surfspots/Surfspot';
   styleUrls: ['./filter-drawer.component.scss']
 })
 export class FilterDrawerComponent implements OnInit {
-  surfspotList: Observable<Surfspot[]>;
   showDrawer: boolean;
 
+  @Input()
+  surfspotList: Observable<Surfspot[]>;
   @Output()
   onSurfspotSelection: EventEmitter<any> = new EventEmitter();
 
 
-  constructor(private _dataService: SurfspotService) {
+  constructor() {
     this.showDrawer = false;
   }
 
@@ -24,12 +24,11 @@ export class FilterDrawerComponent implements OnInit {
     this.showDrawer = !this.showDrawer;
   }
 
-  setActiveSurfspot(spot: Surfspot): void {
+  setActiveSurfspotAndImageList(spot: Surfspot): void {
     this.onSurfspotSelection.emit({spot});
   }
 
   ngOnInit() {
-    this.surfspotList = this._dataService.fetchSurfspotList();
   }
 
 }
