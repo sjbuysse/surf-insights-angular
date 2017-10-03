@@ -15,13 +15,15 @@ import { WindowRefService } from './window-ref.service';
 
 import { FilterDrawerComponent } from './filter-drawer/filter-drawer.component';
 import { SurfspotComponent } from './surfspots/surfspot.component';
+import { ImageGalleryComponent } from './image-gallery/image-gallery.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
     FilterDrawerComponent,
-    SurfspotComponent
+    SurfspotComponent,
+    ImageGalleryComponent
   ],
   imports: [
     BrowserModule,

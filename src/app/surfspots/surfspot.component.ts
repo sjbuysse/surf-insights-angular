@@ -2,7 +2,6 @@ import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {Surfspot} from './Surfspot';
 import {ImageDetails} from './ImageDetails';
 import {Observable} from 'rxjs/Observable';
-import {WindowRefService} from '../window-ref.service';
 
 @Component({
   selector: 'si-surfspot',
@@ -10,8 +9,6 @@ import {WindowRefService} from '../window-ref.service';
   styleUrls: ['./surfspot.component.scss']
 })
 export class SurfspotComponent implements OnInit {
-  private _window: Window;
-
   @Input()
   activeSurfspot: Surfspot;
   @Input()
@@ -37,8 +34,7 @@ export class SurfspotComponent implements OnInit {
   @Output()
   onImageSelection: EventEmitter<any> = new EventEmitter();
 
-  constructor(_windowRefService: WindowRefService) {
-    this._window = _windowRefService.nativeWindow;
+  constructor() {
     this.showPopup = false;
   }
 
@@ -54,28 +50,13 @@ export class SurfspotComponent implements OnInit {
     this.onCancelEditing.emit();
   }
 
-  handleImageSelection($event): void {
-    console.log($event);
+  deleteImage(image: ImageDetails): void {
+    this.onDeleteImage.emit(image);
   }
 
   update(): void {
     this.onUpdate.emit({surfspotValues: this.surfspotFormValues, imageListValues: this.imageListFormValues});
   }
-
-  deleteImage(image: ImageDetails): void {
-    if (confirm('Are you sure you want to permanently delete this image?')) {
-      this.onDeleteImage.emit(image);
-    }
-  }
-
-  // return true if browser supports the File API
-  supportFileAPI = function(){
-    if (this._window.File && this._window.FileReader && this._window.FileList && this._window.Blob) {
-      return true;
-    } else {
-      return false;
-    }
-  };
 
   ngOnInit() {
   }

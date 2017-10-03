@@ -10,9 +10,6 @@ import {ImageDetails} from './surfspots/ImageDetails';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit{
-  lat: number = 51.678418;
-  lng: number = 7.809007;
-
   // SurfComponent variables
   surfspotList: Observable<Surfspot[]>;
   activeSurfspot: Surfspot;
@@ -36,10 +33,10 @@ export class AppComponent implements OnInit{
   }
 
   setSurfComponentVariables($event): void {
-    // set activeSurfspotImageList
-    this.activeSurfspotImageList = this._dataService.fetchImageList($event.spot);
     // set activeSurfspot
     this.activeSurfspot = $event.spot;
+    // set activeSurfspotImageList
+    this.activeSurfspotImageList = this._dataService.fetchImageList($event.spot);
     this.resetSurfComponentFormValues();
     this.toggleDrawer();
   }
