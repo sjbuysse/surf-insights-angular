@@ -34,9 +34,8 @@ export class SurfspotService {
 
   updateImageList(spot, imageList): void {
     imageList.forEach(image =>
-{      console.log(image);
       this._db.list('/userObjects/images/sVeRmu9z9hTVd6Xf0kOJCwQNuXy1/' + spot.$key )
-        .update(image.$key, image);}
+        .update(image.$key, image)
     );
   }
 
@@ -46,7 +45,6 @@ export class SurfspotService {
 
   removeImageDetails(spot, image): void {
     const ref = this._db.object(`/userObjects/images/sVeRmu9z9hTVd6Xf0kOJCwQNuXy1/${spot.$key}/${image.$key}`);
-    console.log("kaas");
     ref.remove();
   }
 }

@@ -13,65 +13,71 @@ export class AppComponent implements OnInit{
   lat: number = 51.678418;
   lng: number = 7.809007;
 
+  // SurfComponent variables
   surfspotList: Observable<Surfspot[]>;
   activeSurfspot: Surfspot;
-  activeSurfspotBackup: Surfspot;
   activeSurfspotImageList: Observable<ImageDetails[]>;
-  activeSurfspotImageListBackup: ImageDetails[];
+  surfspotFormValues: Surfspot;
+  imageListFormValues: ImageDetails[];
+  showPopup: boolean;
+  showDrawer: boolean;
 
   constructor(private _dataService: SurfspotService) {
+    this.showPopup = false;
+    this.showDrawer = false;
   }
 
-  setActiveSurfspotAndImageList($event): void {
+  togglePopup(): void {
+    this.showPopup = !this.showPopup;
+  }
+
+  toggleDrawer(): void {
+    this.showDrawer = !this.showDrawer;
+  }
+
+  setSurfComponentVariables($event): void {
+    // set activeSurfspotImageList
+    this.activeSurfspotImageList = this._dataService.fetchImageList($event.spot);
+    // set activeSurfspot
     this.activeSurfspot = $event.spot;
-    this.activeSurfspotImageList = this._dataService.fetchImageList(this.activeSurfspot);
+    this.resetSurfComponentFormValues();
+    this.toggleDrawer();
   }
 
-  setEditing($event): void {
-    this.activeSurfspot.editing = $event;
-    this.setBackups();
+  setEditing(editing): void {
+    this.activeSurfspot.editing = editing;
   }
 
   cancelEditing(): void {
-    this.rollbackBackups();
-    this.resetBackupsAndEditingVar();
+    this.activeSurfspot.editing = false;
+    this.resetSurfComponentFormValues();
   }
 
   deleteImage(image: ImageDetails): void {
     this.removeSingleImage(image);
   }
 
-  update(): void {
-    this.resetBackupsAndEditingVar();
+  update($event): void {
+    this.updateSurfspotValues($event.surfspotValues);
+    this.activeSurfspot.editing = false;
     this._dataService.updateSurfspot(this.activeSurfspot);
-    // this._dataService.updateImageList(this.activeSurfspot, this.activeSurfspotImageList);
+    this._dataService.updateImageList(this.activeSurfspot, $event.imageListValues);
   }
 
-  private rollbackBackups(): void {
-    for (const key of Object.keys(this.activeSurfspotBackup)) {
-      this.activeSurfspot[key] = this.activeSurfspotBackup[key];
+  private updateSurfspotValues(formValues) {
+    for (const key of Object.keys(formValues)){
+      this.activeSurfspot[key] = formValues[key];
     }
-    // set imagelist to backup through dataservice
-    // this._dataService.updateImageList(this.activeSurfspot, this.activeSurfspotImageListBackup);
   }
 
-  private setBackups() {
-    this.activeSurfspotBackup = Object.assign({}, this.activeSurfspot);
-    // this.activeSurfspotImageListBackup = JSON.parse(JSON.stringify(this.activeSurfspotImageList));
+  private resetSurfComponentFormValues() {
+    // set surfspotFormValues
+    this.surfspotFormValues = Object.assign({}, this.activeSurfspot);
+    // set ImageListFormValues
     this.activeSurfspotImageList
       .first()
       .toPromise()
-      .then(list => this.activeSurfspotImageListBackup = list);
-  }
-
-  private resetBackupsAndEditingVar() {
-    this.activeSurfspot.editing = false;
-    this.activeSurfspotBackup = null;
-    this.activeSurfspotImageListBackup = null;
-  }
-
-  ngOnInit(): void {
-    this.surfspotList = this._dataService.fetchSurfspotList();
+      .then(response => this.imageListFormValues = response);
   }
 
   private removeSingleImage(image: ImageDetails) {
@@ -79,5 +85,9 @@ export class AppComponent implements OnInit{
     this._dataService.removeImageStorage(image);
     // remove imageDetails from database
     this._dataService.removeImageDetails(this.activeSurfspot, image);
+  }
+
+  ngOnInit(): void {
+    this.surfspotList = this._dataService.fetchSurfspotList();
   }
 }

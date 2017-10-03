@@ -5,20 +5,20 @@
     <div class="popup__info info" id="info-wrapper">
       <button class="info__edit-btn" (click)="setEditing(true)"></button>
       <label class="info__name" *ngIf="!activeSurfspot.editing" (dblclick)="setEditing(true)">{{activeSurfspot.name }}</label>
-      <input class="info__name--edit" *ngIf="activeSurfspot.editing" [(ngModel)]="activeSurfspot.name"
+      <input class="info__name--edit" *ngIf="activeSurfspot.editing" [(ngModel)]="surfspotFormValues.name"
         (keyup.enter)="update()" (keyup.escape)="cancelEditing()" />
       <label class="info__latlng">lat: <span >{{activeSurfspot.latlng.lat}}</span></label>
       <label class="info__latlng">lng: <span >{{activeSurfspot.latlng.lng}}</span> </label>
       <p class="info__details" *ngIf="!activeSurfspot.editing" (dblclick)="setEditing(true)">{{activeSurfspot.info}}</p>
-      <textarea class='info__details--edit' *ngIf="activeSurfspot.editing" [(ngModel)]="activeSurfspot.info"
+      <textarea class='info__details--edit' *ngIf="activeSurfspot.editing" [(ngModel)]="surfspotFormValues.info"
       (keyup.enter)="update()" (keyup.escape)="cancelEditing()"></textarea>
       <div class="info__images images" id="image-wrapper">
         <h3 >Images</h3>
         <div class="line-break"></div>
-        <div class="images__image image" *ngFor="let image of activeSurfspotImageList | async">
+        <div class="images__image image" *ngFor="let image of (activeSurfspotImageList| async); let i = index ">
           <img class="image__pic" [src]="image.url"/>
           <p class="image__caption" *ngIf="!activeSurfspot.editing" (dblclick)="setEditing(true)">{{image.caption}}</p>
-          <input class='image__caption--edit' *ngIf="activeSurfspot.editing" [(ngModel)]="image.caption"
+          <input class='image__caption--edit' *ngIf="activeSurfspot.editing" [(ngModel)]="imageListFormValues[i].caption"
       (keyup.enter)="update()" (keyup.escape)="cancelEditing()"/>
           <button class="image__destroy-btn" (click)="deleteImage(image)" ></button>
         </div>

@@ -6,11 +6,17 @@
 <!--</agm-map>-->
 <si-filter-drawer
   [surfspotList]="surfspotList"
-  (onSurfspotSelection)="setActiveSurfspotAndImageList($event)"></si-filter-drawer>
+  [showDrawer]="showDrawer"
+  (onToggleDrawer)="toggleDrawer()"
+  (onSurfspotSelection)="setSurfComponentVariables($event)"></si-filter-drawer>
 <si-surfspot
   (onSetEditing)="setEditing($event)"
   (onCancelEditing)="cancelEditing()"
-  (onUpdate)="update()"
+  (onUpdate)="update($event)"
   (onDeleteImage)="deleteImage($event)"
+  (onTogglePopup)="togglePopup()"
   [activeSurfspotImageList]="activeSurfspotImageList"
-  [activeSurfspot]="activeSurfspot"></si-surfspot>
+  [activeSurfspot]="activeSurfspot"
+  [imageListFormValues]="imageListFormValues"
+  [surfspotFormValues]="surfspotFormValues"
+  [showPopup]="showPopup"></si-surfspot>

@@ -8,12 +8,15 @@ import {Surfspot} from '../surfspots/Surfspot';
   styleUrls: ['./filter-drawer.component.scss']
 })
 export class FilterDrawerComponent implements OnInit {
+  @Input()
   showDrawer: boolean;
 
   @Input()
   surfspotList: Observable<Surfspot[]>;
   @Output()
   onSurfspotSelection: EventEmitter<any> = new EventEmitter();
+  @Output()
+  onToggleDrawer: EventEmitter<any> = new EventEmitter();
 
 
   constructor() {
@@ -21,7 +24,7 @@ export class FilterDrawerComponent implements OnInit {
   }
 
   toggleDrawer(): void {
-    this.showDrawer = !this.showDrawer;
+    this.onToggleDrawer.emit();
   }
 
   setActiveSurfspotAndImageList(spot: Surfspot): void {

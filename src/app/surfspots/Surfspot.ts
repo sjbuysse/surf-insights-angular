@@ -1,6 +1,6 @@
 export class Surfspot {
-  editing: boolean = false;
   id: number;
+  editing: boolean = false;
   info: string;
   name: string;
   latlng: {
