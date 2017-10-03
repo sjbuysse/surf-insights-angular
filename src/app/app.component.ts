@@ -16,16 +16,15 @@ export class AppComponent implements OnInit{
   surfspotList: Observable<Surfspot[]>;
   activeSurfspot: Surfspot;
   activeSurfspotBackup: Surfspot;
-  activeSurfspotImageList: ImageDetails[];
+  activeSurfspotImageList: Observable<ImageDetails[]>;
   activeSurfspotImageListBackup: ImageDetails[];
 
-  constructor(private _dataService: SurfspotService){
+  constructor(private _dataService: SurfspotService) {
   }
 
   setActiveSurfspotAndImageList($event): void {
     this.activeSurfspot = $event.spot;
-    this._dataService.fetchImageList($event.spot)
-      .then(imageList =>  this.activeSurfspotImageList = imageList);
+    this.activeSurfspotImageList = this._dataService.fetchImageList(this.activeSurfspot);
   }
 
   setEditing($event): void {
@@ -38,20 +37,31 @@ export class AppComponent implements OnInit{
     this.resetBackupsAndEditingVar();
   }
 
+  deleteImage(image: ImageDetails): void {
+    this.removeSingleImage(image);
+  }
+
   update(): void {
     this.resetBackupsAndEditingVar();
     this._dataService.updateSurfspot(this.activeSurfspot);
-    this._dataService.updateImageList(this.activeSurfspot, this.activeSurfspotImageList);
+    // this._dataService.updateImageList(this.activeSurfspot, this.activeSurfspotImageList);
   }
 
-  private rollbackBackups() {
-    this.activeSurfspotImageList = JSON.parse(JSON.stringify(this.activeSurfspotImageListBackup));
-    this.activeSurfspot = Object.assign({}, this.activeSurfspotBackup);
+  private rollbackBackups(): void {
+    for (const key of Object.keys(this.activeSurfspotBackup)) {
+      this.activeSurfspot[key] = this.activeSurfspotBackup[key];
+    }
+    // set imagelist to backup through dataservice
+    // this._dataService.updateImageList(this.activeSurfspot, this.activeSurfspotImageListBackup);
   }
 
   private setBackups() {
     this.activeSurfspotBackup = Object.assign({}, this.activeSurfspot);
-    this.activeSurfspotImageListBackup = JSON.parse(JSON.stringify(this.activeSurfspotImageList));
+    // this.activeSurfspotImageListBackup = JSON.parse(JSON.stringify(this.activeSurfspotImageList));
+    this.activeSurfspotImageList
+      .first()
+      .toPromise()
+      .then(list => this.activeSurfspotImageListBackup = list);
   }
 
   private resetBackupsAndEditingVar() {
@@ -62,5 +72,12 @@ export class AppComponent implements OnInit{
 
   ngOnInit(): void {
     this.surfspotList = this._dataService.fetchSurfspotList();
+  }
+
+  private removeSingleImage(image: ImageDetails) {
+    // remove image from storage
+    this._dataService.removeImageStorage(image);
+    // remove imageDetails from database
+    this._dataService.removeImageDetails(this.activeSurfspot, image);
   }
 }

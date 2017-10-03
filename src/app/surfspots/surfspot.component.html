@@ -15,12 +15,12 @@
       <div class="info__images images" id="image-wrapper">
         <h3 >Images</h3>
         <div class="line-break"></div>
-        <div class="images__image image" *ngFor="let image of activeSurfspotImageList">
+        <div class="images__image image" *ngFor="let image of activeSurfspotImageList | async">
           <img class="image__pic" [src]="image.url"/>
           <p class="image__caption" *ngIf="!activeSurfspot.editing" (dblclick)="setEditing(true)">{{image.caption}}</p>
           <input class='image__caption--edit' *ngIf="activeSurfspot.editing" [(ngModel)]="image.caption"
       (keyup.enter)="update()" (keyup.escape)="cancelEditing()"/>
-          <button class="image__destroy-btn" ></button>
+          <button class="image__destroy-btn" (click)="deleteImage(image)" ></button>
         </div>
       </div>
       <div class="info__upload-image upload-image">

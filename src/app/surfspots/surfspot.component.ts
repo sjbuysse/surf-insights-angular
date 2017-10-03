@@ -1,6 +1,7 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {Surfspot} from './Surfspot';
 import {ImageDetails} from './ImageDetails';
+import {ConfirmationService} from 'primeng/primeng';
 
 @Component({
   selector: 'si-surfspot',
@@ -18,9 +19,11 @@ export class SurfspotComponent implements OnInit {
   @Output()
   onSetEditing: EventEmitter<boolean> = new EventEmitter();
   @Output()
-  onCancelEditing: EventEmitter<boolean> = new EventEmitter();
+  onCancelEditing: EventEmitter<any> = new EventEmitter();
   @Output()
-  onUpdate: EventEmitter<boolean> = new EventEmitter();
+  onUpdate: EventEmitter<any> = new EventEmitter();
+  @Output()
+  onDeleteImage: EventEmitter<any> = new EventEmitter();
 
   constructor() {
     this.showPopup = false;
@@ -42,7 +45,12 @@ export class SurfspotComponent implements OnInit {
     this.onUpdate.emit();
   }
 
-  ngOnInit() {
+  deleteImage(image: ImageDetails) {
+    if(confirm('Are you sure you want to permanently delete this image?')) {
+      this.onDeleteImage.emit(image);
+    }
   }
 
+  ngOnInit() {
+  }
 }
