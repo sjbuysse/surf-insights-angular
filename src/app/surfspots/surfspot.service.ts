@@ -40,7 +40,7 @@ export class SurfspotService {
   }
 
   removeImageStorage(image: ImageDetails): void {
-    // this._firebase.storage().refFromURL(image.url).delete();
+    this._firebase.storage().refFromURL(image.url).delete();
   }
 
   removeImageDetails(spot, image): void {
