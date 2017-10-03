@@ -23,7 +23,7 @@
           <button class="image__destroy-btn" (click)="deleteImage(image)" ></button>
         </div>
       </div>
-      <div class="info__upload-image upload-image">
+      <div class="info__upload-image upload-image" *ngIf="!activeSurfspot.editing">
         <h3>Add Image</h3>
         <div class="line-break"></div>
         <div class="upload-image__progress hidden" id="progress-wrapper">
@@ -36,8 +36,8 @@
         <textarea name="caption" id="image-caption" placeholder="Write some infomation about this image" class="upload-image__caption hidden"></textarea>
         <div class="line-break"></div>
         <input type="file" name="imageFile" id="imageFile" class="upload-image__input"
-               accepts="image/jpeg, image/jpg, image/png, image/bmp" />
-        <label for="imageFile" class="upload-image__select-btn">Select image</label>
+               accepts="image/jpeg, image/jpg, image/png, image/bmp"  *ngIf="supportFileAPI()" (change)="handleImageSelection($event)"/>
+        <label for="imageFile" class="upload-image__select-btn" *ngIf="supportFileAPI()">Select image</label>
         <div class="line-break"></div>
         <button id="images-upload-btn" class="upload-image__upload-btn hidden" >Submit</button>
       </div>

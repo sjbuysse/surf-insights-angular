@@ -2,6 +2,7 @@ import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {Surfspot} from './Surfspot';
 import {ImageDetails} from './ImageDetails';
 import {Observable} from 'rxjs/Observable';
+import {WindowRefService} from '../window-ref.service';
 
 @Component({
   selector: 'si-surfspot',
@@ -9,6 +10,8 @@ import {Observable} from 'rxjs/Observable';
   styleUrls: ['./surfspot.component.scss']
 })
 export class SurfspotComponent implements OnInit {
+  private _window: Window;
+
   @Input()
   activeSurfspot: Surfspot;
   @Input()
@@ -31,8 +34,11 @@ export class SurfspotComponent implements OnInit {
   onDeleteImage: EventEmitter<any> = new EventEmitter();
   @Output()
   onTogglePopup: EventEmitter<any> = new EventEmitter();
+  @Output()
+  onImageSelection: EventEmitter<any> = new EventEmitter();
 
-  constructor() {
+  constructor(_windowRefService: WindowRefService) {
+    this._window = _windowRefService.nativeWindow;
     this.showPopup = false;
   }
 
@@ -48,6 +54,10 @@ export class SurfspotComponent implements OnInit {
     this.onCancelEditing.emit();
   }
 
+  handleImageSelection($event): void {
+    console.log($event);
+  }
+
   update(): void {
     this.onUpdate.emit({surfspotValues: this.surfspotFormValues, imageListValues: this.imageListFormValues});
   }
@@ -58,17 +68,14 @@ export class SurfspotComponent implements OnInit {
     }
   }
 
-  private setSurfFormValues(surfspot: Surfspot) {
-    this.surfspotFormValues = Object.assign({}, this.activeSurfspot);
-    console.log(this.surfspotFormValues);
-  }
-
-  private setImageListFormValues(imageList: Observable<ImageDetails[]>) {
-    this.activeSurfspotImageList
-      .first()
-      .toPromise()
-      .then(response => this.imageListFormValues = response);
-  }
+  // return true if browser supports the File API
+  supportFileAPI = function(){
+    if (this._window.File && this._window.FileReader && this._window.FileList && this._window.Blob) {
+      return true;
+    } else {
+      return false;
+    }
+  };
 
   ngOnInit() {
   }
