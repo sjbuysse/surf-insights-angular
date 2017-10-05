@@ -15,8 +15,10 @@
   (onUpdate)="update($event)"
   (onDeleteImage)="deleteImage($event)"
   (onTogglePopup)="togglePopup()"
+  (onImageSelection)="handleImageSelection($event)"
   [activeSurfspotImageList]="activeSurfspotImageList"
   [activeSurfspot]="activeSurfspot"
   [imageListFormValues]="imageListFormValues"
+  [imagePreview]="imagePreview"
   [surfspotFormValues]="surfspotFormValues"
   [showPopup]="showPopup"></si-surfspot>

@@ -20,6 +20,8 @@ export class ImageGalleryComponent implements OnInit {
   imageListFormValues: ImageDetails[];
   @Input()
   surfspotFormValues: Surfspot;
+  @Input()
+  imagePreview: object;
 
   @Output()
   onSetEditing: EventEmitter<boolean> = new EventEmitter();
@@ -55,7 +57,7 @@ export class ImageGalleryComponent implements OnInit {
   }
 
   handleImageSelection($event): void {
-    console.log($event);
+    this.onImageSelection.emit($event);
   }
 
   // return true if browser supports the File API

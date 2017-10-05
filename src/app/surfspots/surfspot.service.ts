@@ -4,6 +4,7 @@ import {AngularFireDatabase} from 'angularfire2/database';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/toPromise';
 import 'rxjs/add/operator/first';
+import 'rxjs/add/operator/shareReplay';
 import {Observable} from 'rxjs/Rx';
 import {ImageDetails} from './ImageDetails';
 
@@ -20,11 +21,11 @@ export class SurfspotService {
   }
 
   fetchImageList(spot): Observable<ImageDetails[]> {
-    return this._db.list('/userObjects/images/sVeRmu9z9hTVd6Xf0kOJCwQNuXy1/' + spot.$key );
+    return this._db.list('/userObjects/images/sVeRmu9z9hTVd6Xf0kOJCwQNuXy1/' + spot.$key ).shareReplay();
   }
 
   fetchSurfspotList(): Observable<Surfspot[]> {
-    return this._surfspotListRef;
+    return this._surfspotListRef.shareReplay();
   }
 
   updateSurfspot(spot): void {

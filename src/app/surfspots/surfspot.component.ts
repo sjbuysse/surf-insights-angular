@@ -19,6 +19,8 @@ export class SurfspotComponent implements OnInit {
   imageListFormValues: ImageDetails[];
   @Input()
   showPopup: boolean;
+  @Input()
+  imagePreview: object;
 
 
   @Output()
@@ -52,6 +54,10 @@ export class SurfspotComponent implements OnInit {
 
   deleteImage(image: ImageDetails): void {
     this.onDeleteImage.emit(image);
+  }
+
+  handleImageSelection($event): void {
+    this.onImageSelection.emit($event);
   }
 
   update(): void {

@@ -13,11 +13,15 @@ export class AppComponent implements OnInit{
   // SurfComponent variables
   surfspotList: Observable<Surfspot[]>;
   activeSurfspot: Surfspot;
-  activeSurfspotImageList: Observable<ImageDetails[]>;
   surfspotFormValues: Surfspot;
-  imageListFormValues: ImageDetails[];
   showPopup: boolean;
   showDrawer: boolean;
+
+  // ImageGalleryComponent variables
+  activeSurfspotImageList: Observable<ImageDetails[]>;
+  imageListFormValues: ImageDetails[];
+  imagePreview: object;
+  resizedImage: object;
 
   constructor(private _dataService: SurfspotService) {
     this.showPopup = false;
@@ -61,6 +65,31 @@ export class AppComponent implements OnInit{
     this._dataService.updateImageList(this.activeSurfspot, $event.imageListValues);
   }
 
+  handleImageSelection($event): void {
+    const selectedFile = $event.target.files[0];
+    this.resizedImage = null;
+    if (this.extensionAllowed(selectedFile.name)) {
+      // preview images, show upload button, and start resizing image for upload
+      const reader = new FileReader();
+      reader.onload = (event: any) => {
+        this.imagePreview = event.target.result;
+        // reset resized image if still present from last time
+        if (this.resizedImage) {
+          this.resizedImage = null;
+        }
+        // start resizing the image as soon as it is selected
+        // imageResizer.resizeImage(event.target, (result) => this.resizedImage = result);
+      };
+      // Read in the image file as a data URL.
+      reader.readAsDataURL(selectedFile);
+    } else {
+      alert('The file extension is not allowed.\n' +
+        'Please try again with a jpg, jpeg, png or bmp file.');
+      // this.resetUploadVariables();
+      return;
+    }
+  }
+
   private updateSurfspotValues(formValues) {
     for (const key of Object.keys(formValues)){
       this.activeSurfspot[key] = formValues[key];
@@ -82,6 +111,24 @@ export class AppComponent implements OnInit{
     this._dataService.removeImageStorage(image);
     // remove imageDetails from database
     this._dataService.removeImageDetails(this.activeSurfspot, image);
+  }
+
+  private extensionAllowed(filename): boolean {
+    let isAllowed: boolean;
+    // check if selected file extension is allowed
+    const ext = filename.match(/\.([^\.]+)$/)[1];
+    switch (ext.toLowerCase()) {
+      case 'jpg':
+      case 'jpeg':
+      case 'png':
+      case 'bmp':
+        isAllowed = true;
+        break;
+      default:
+        isAllowed = false;
+        break;
+    }
+    return isAllowed;
   }
 
   ngOnInit(): void {
