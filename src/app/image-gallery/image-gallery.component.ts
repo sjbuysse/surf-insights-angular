@@ -12,31 +12,16 @@ import {WindowRefService} from '../window-ref.service';
 export class ImageGalleryComponent implements OnInit {
   private _window: Window;
 
-  @Input()
-  activeSurfspot: Surfspot;
-  @Input()
-  activeSurfspotImageList: Observable<ImageDetails[]>;
-  @Input()
-  imageListFormValues: ImageDetails[];
-  @Input()
-  surfspotFormValues: Surfspot;
-  @Input()
-  imagePreview: object;
+  @Input() activeSurfspot: Surfspot;
+  @Input() activeSurfspotImageList: Observable<ImageDetails[]>;
+  @Input() imageListFormValues: ImageDetails[];
+  @Input() surfspotFormValues: Surfspot;
+  @Input() uploadProgress: number;
 
-  @Output()
-  onSetEditing: EventEmitter<boolean> = new EventEmitter();
-  @Output()
-  onCancelEditing: EventEmitter<any> = new EventEmitter();
-  @Output()
-  onUpdate: EventEmitter<any> = new EventEmitter();
-  @Output()
-  onDeleteImage: EventEmitter<any> = new EventEmitter();
-  @Output()
-  onImageSelection: EventEmitter<any> = new EventEmitter();
-
-  constructor(_windowRefService: WindowRefService) {
-    this._window = _windowRefService.nativeWindow;
-  }
+  @Output() onSetEditing: EventEmitter<boolean> = new EventEmitter();
+  @Output() onCancelEditing: EventEmitter<any> = new EventEmitter();
+  @Output() onUpdate: EventEmitter<any> = new EventEmitter();
+  @Output() onDeleteImage: EventEmitter<any> = new EventEmitter();
 
   setEditing(editing: boolean): void {
     this.onSetEditing.emit(editing);
@@ -55,19 +40,6 @@ export class ImageGalleryComponent implements OnInit {
       this.onDeleteImage.emit(image);
     }
   }
-
-  handleImageSelection($event): void {
-    this.onImageSelection.emit($event);
-  }
-
-  // return true if browser supports the File API
-  supportFileAPI = function(){
-    if (this._window.File && this._window.FileReader && this._window.FileList && this._window.Blob) {
-      return true;
-    } else {
-      return false;
-    }
-  };
 
   ngOnInit() {
   }

@@ -17,12 +17,18 @@
         (onCancelEditing)="cancelEditing()"
         (onUpdate)="update($event)"
         (onDeleteImage)="deleteImage($event)"
-        (onImageSelection)="handleImageSelection($event)"
         [activeSurfspotImageList]="activeSurfspotImageList"
         [activeSurfspot]="activeSurfspot"
         [imageListFormValues]="imageListFormValues"
-        [imagePreview]="imagePreview"
         [surfspotFormValues]="surfspotFormValues"></si-image-gallery>
+      <si-upload-image
+        (onImageSelection)="handleImageSelection($event)"
+        (onImageUpload)="handleImageUpload()"
+        (onChangePreviewCaption)="handleChangePreviewCaption($event)"
+        [uploadProgress]="uploadProgress"
+        [activeSurfspot]="activeSurfspot"
+        [previewImage]="previewImage"
+        [previewImageCaption]="previewImageCaption"></si-upload-image>
       <button class="info__update-btn">
         Update
       </button>

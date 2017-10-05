@@ -47,7 +47,6 @@ export class ImageResizerService {
         }, delay); // gives the UI a chance to get something done.
       };
 
-      console.log(data);
       img.src = data;
       img.onerror = reject;
 

@@ -17,6 +17,7 @@ import { ImageResizerService } from './image-resizer.service';
 import { FilterDrawerComponent } from './filter-drawer/filter-drawer.component';
 import { SurfspotComponent } from './surfspots/surfspot.component';
 import { ImageGalleryComponent } from './image-gallery/image-gallery.component';
+import { UploadImageComponent } from './upload-image/upload-image.component';
 
 
 @NgModule({
@@ -24,7 +25,8 @@ import { ImageGalleryComponent } from './image-gallery/image-gallery.component';
     AppComponent,
     FilterDrawerComponent,
     SurfspotComponent,
-    ImageGalleryComponent
+    ImageGalleryComponent,
+    UploadImageComponent
   ],
   imports: [
     BrowserModule,

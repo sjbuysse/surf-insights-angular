@@ -9,32 +9,24 @@ import {Observable} from 'rxjs/Observable';
   styleUrls: ['./surfspot.component.scss']
 })
 export class SurfspotComponent implements OnInit {
-  @Input()
-  activeSurfspot: Surfspot;
-  @Input()
-  activeSurfspotImageList: Observable<ImageDetails[]>;
-  @Input()
-  surfspotFormValues: Surfspot;
-  @Input()
-  imageListFormValues: ImageDetails[];
-  @Input()
-  showPopup: boolean;
-  @Input()
-  imagePreview: object;
+  @Input() activeSurfspot: Surfspot;
+  @Input() activeSurfspotImageList: Observable<ImageDetails[]>;
+  @Input() surfspotFormValues: Surfspot;
+  @Input() imageListFormValues: ImageDetails[];
+  @Input() showPopup: boolean;
+  @Input() previewImage: object;
+  @Input() previewImageCaption: string;
+  @Input() uploadProgress: number;
 
 
-  @Output()
-  onSetEditing: EventEmitter<boolean> = new EventEmitter();
-  @Output()
-  onCancelEditing: EventEmitter<any> = new EventEmitter();
-  @Output()
-  onUpdate: EventEmitter<any> = new EventEmitter();
-  @Output()
-  onDeleteImage: EventEmitter<any> = new EventEmitter();
-  @Output()
-  onTogglePopup: EventEmitter<any> = new EventEmitter();
-  @Output()
-  onImageSelection: EventEmitter<any> = new EventEmitter();
+  @Output() onSetEditing: EventEmitter<boolean> = new EventEmitter();
+  @Output() onCancelEditing: EventEmitter<any> = new EventEmitter();
+  @Output() onUpdate: EventEmitter<any> = new EventEmitter();
+  @Output() onDeleteImage: EventEmitter<any> = new EventEmitter();
+  @Output() onTogglePopup: EventEmitter<any> = new EventEmitter();
+  @Output() onImageSelection: EventEmitter<any> = new EventEmitter();
+  @Output() onImageUpload: EventEmitter<any> = new EventEmitter();
+  @Output() onChangePreviewCaption: EventEmitter<any> = new EventEmitter();
 
   constructor() {
     this.showPopup = false;
@@ -58,6 +50,14 @@ export class SurfspotComponent implements OnInit {
 
   handleImageSelection($event): void {
     this.onImageSelection.emit($event);
+  }
+
+  handleImageUpload(): void {
+    this.onImageUpload.emit();
+  }
+
+  handleChangePreviewCaption($event): void {
+    this.onChangePreviewCaption.emit($event);
   }
 
   update(): void {

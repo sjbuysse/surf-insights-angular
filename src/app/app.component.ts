@@ -21,10 +21,15 @@ export class AppComponent implements OnInit{
   // ImageGalleryComponent variables
   activeSurfspotImageList: Observable<ImageDetails[]>;
   imageListFormValues: ImageDetails[];
-  imagePreview: object;
+  previewImage: object;
+  previewImageCaption: string;
   resizedImage: object;
+  uploadProgress: number;
+
+  selectedFile: any;
 
   constructor(private _dataService: SurfspotService, private _imageResizerService: ImageResizerService) {
+    this.previewImageCaption = '';
     this.showPopup = false;
     this.showDrawer = false;
   }
@@ -67,21 +72,66 @@ export class AppComponent implements OnInit{
   }
 
   handleImageSelection($event): void {
-    const selectedFile = $event.target.files[0];
+    this.selectedFile = $event.target.files[0];
     this.resizedImage = null;
 
-    if (this.extensionAllowed(selectedFile.name)) {
-      this.readSelectedFile(selectedFile)
+    if (this.extensionAllowed(this.selectedFile.name)) {
+      this.readSelectedFile(this.selectedFile)
         .then((result) => {
-          this.imagePreview = result;
+          this.previewImage = result;
           this.resizeImage(result).then((resizedImage) => this.resizedImage = resizedImage);
         });
     } else {
       alert('The file extension is not allowed.\n' +
         'Please try again with a jpg, jpeg, png or bmp file.');
-      // this.resetUploadVariables();
+      this.resetUploadVariables();
       return;
     }
+  }
+
+  handleChangePreviewCaption($event): void {
+    console.log($event);
+    this.previewImageCaption = $event;
+  }
+
+  handleImageUpload(): void {
+    const self = this;
+    const uploadTask = this._dataService.uploadImage(this.activeSurfspot, this.resizedImage, this.selectedFile.name);
+    // // Register three observers:
+    // // 1. 'state_changed' observer, called any time the state changes
+    // // 2. Error observer, called on failure
+    // // 3. Completion observer, called on successful completion
+    uploadTask.on('state_changed', self.setUploadProgress, self.handleUploadError,
+      function(){
+        self._dataService.uploadImageMetaData(uploadTask, self.activeSurfspot, self.previewImageCaption, self.selectedFile.name);
+      });
+    // upload imageDetails naar de firebase database
+  }
+
+  private handleUploadError(error) {
+    // Handle unsuccessful uploads
+    console.log('There occured an error while uploading the file to the server :' );
+    console.log(error);
+    this.resetUploadVariables();
+  }
+
+  private resetUploadVariables() {
+    // todo: implement
+  }
+
+  private setUploadProgress(snapshot) {
+    // Observe state change events such as progress, pause, and resume
+    // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+    this.uploadProgress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+    console.log('Upload is ' + this.uploadProgress + '% done');
+    // switch (snapshot.state) {
+    //   case firebase.storage.TaskState.PAUSED: // or 'paused'
+    //     console.log('Upload is paused');
+    //     break;
+    //   case firebase.storage.TaskState.RUNNING: // or 'running'
+    //     console.log('Upload is running');
+    //     break;
+    // }
   }
 
   private resizeImage(image): Promise<object> {

@@ -44,6 +44,28 @@ export class SurfspotService {
     this._firebase.storage().refFromURL(image.url).delete();
   }
 
+  uploadImage(spot, image: object, name: string): any {
+    // upload resizedImage naar de firebase storage
+    // add timestamp to name to avoid duplicate firebase references.
+    const timestamp = Date.now();
+    const imageStorageRef = this._firebase.storage().ref().child('/images/' + spot.$key + '/' +
+      timestamp + name);
+    return imageStorageRef.put(image);
+  }
+  uploadImageMetaData(uploadTask, spot, caption, name) {
+    // Handle successful uploads on complete
+    // Upload image meta data to firebase
+    const downloadURL = uploadTask.snapshot.downloadURL;
+    const imageKey = this._db.list('/userObjects/images/sVeRmu9z9hTVd6Xf0kOJCwQNuXy1/' + spot.$key).push({}).key;
+    const imageData = {
+      'url': downloadURL,
+      'caption': caption,
+      'name': name,
+      'imageKey': imageKey
+    };
+    this._db.list('/userObjects/images/sVeRmu9z9hTVd6Xf0kOJCwQNuXy1/' + spot.$key).update(imageKey, imageData);
+  }
+
   removeImageDetails(spot, image): void {
     const ref = this._db.object(`/userObjects/images/sVeRmu9z9hTVd6Xf0kOJCwQNuXy1/${spot.$key}/${image.$key}`);
     ref.remove();
