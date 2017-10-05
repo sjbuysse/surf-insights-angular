@@ -3,6 +3,7 @@ import {Surfspot} from './surfspots/Surfspot';
 import {SurfspotService} from './surfspots/surfspot.service';
 import {Observable} from 'rxjs/Observable';
 import {ImageDetails} from './surfspots/ImageDetails';
+import {ImageResizerService} from './image-resizer.service';
 
 @Component({
   selector: 'si-root',
@@ -23,7 +24,7 @@ export class AppComponent implements OnInit{
   imagePreview: object;
   resizedImage: object;
 
-  constructor(private _dataService: SurfspotService) {
+  constructor(private _dataService: SurfspotService, private _imageResizerService: ImageResizerService) {
     this.showPopup = false;
     this.showDrawer = false;
   }
@@ -68,26 +69,32 @@ export class AppComponent implements OnInit{
   handleImageSelection($event): void {
     const selectedFile = $event.target.files[0];
     this.resizedImage = null;
+
     if (this.extensionAllowed(selectedFile.name)) {
-      // preview images, show upload button, and start resizing image for upload
-      const reader = new FileReader();
-      reader.onload = (event: any) => {
-        this.imagePreview = event.target.result;
-        // reset resized image if still present from last time
-        if (this.resizedImage) {
-          this.resizedImage = null;
-        }
-        // start resizing the image as soon as it is selected
-        // imageResizer.resizeImage(event.target, (result) => this.resizedImage = result);
-      };
-      // Read in the image file as a data URL.
-      reader.readAsDataURL(selectedFile);
+      // todo readSelectedFile should return a promise, en op resolve zetten we de imagePreview en beginnen we te resizen
+      this.readSelectedFile(selectedFile);
     } else {
       alert('The file extension is not allowed.\n' +
         'Please try again with a jpg, jpeg, png or bmp file.');
       // this.resetUploadVariables();
       return;
     }
+  }
+
+  private readSelectedFile(selectedFile) {
+    // preview images, show upload button, and start resizing image for upload
+    const reader = new FileReader();
+    reader.onload = (event: any) => {
+      this.imagePreview = event.target.result;
+      // reset resized image if still present from last time
+      if (this.resizedImage) {
+        this.resizedImage = null;
+      }
+      // start resizing the image as soon as it is selected
+      this._imageResizerService.resizeImage(event.target, (result) => this.resizedImage = result);
+    };
+    // Read in the image file as a data URL.
+    reader.readAsDataURL(selectedFile);
   }
 
   private updateSurfspotValues(formValues) {

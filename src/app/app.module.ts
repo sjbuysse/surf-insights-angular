@@ -12,6 +12,7 @@ import { environment } from '../environments/environment';
 
 import { SurfspotService } from './surfspots/surfspot.service';
 import { WindowRefService } from './window-ref.service';
+import { ImageResizerService } from './image-resizer.service';
 
 import { FilterDrawerComponent } from './filter-drawer/filter-drawer.component';
 import { SurfspotComponent } from './surfspots/surfspot.component';
@@ -37,7 +38,8 @@ import { ImageGalleryComponent } from './image-gallery/image-gallery.component';
   ],
   providers: [
     SurfspotService,
-    WindowRefService
+    WindowRefService,
+    ImageResizerService
   ],
   bootstrap: [AppComponent]
 })
