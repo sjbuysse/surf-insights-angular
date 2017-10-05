@@ -5,49 +5,53 @@ export class ImageResizerService {
 
   constructor() { }
 
-  resizeImage(data, callback, maxWidth = 1000, maxHeight = 1000): void {
+  resizeImage(data, maxWidth = 1000, maxHeight = 1000): Promise<object> {
     const self = this;
-    const img = document.createElement('img');
-    // add this delay of 10ms in between actions to free up the call stack and give the UI a chance to get something done.
-    // (Would be better to use web workers in stead, but the support is too little for now and web workers can't access
-    // the DOM (so can't use a canvas))
-    const delay = 10;
+    return new Promise((resolve, reject) => {
+      const img = document.createElement('img');
+      // add this delay of 10ms in between actions to free up the call stack and give the UI a chance to get something done.
+      // (Would be better to use web workers in stead, but the support is too little for now and web workers can't access
+      // the DOM (so can't use a canvas))
+      const delay = 10;
 
-    img.onload = function(){
-      let width = img.width;
-      let height = img.height;
+      img.onload = function(){
+        let width = img.width;
+        let height = img.height;
 
-      if (width > height) {
-        if (width > maxWidth) {
-          height *= maxWidth / width;
-          width = maxWidth;
+        if (width > height) {
+          if (width > maxWidth) {
+            height *= maxWidth / width;
+            width = maxWidth;
+          }
+        } else {
+          if (height > maxHeight) {
+            width *= maxHeight / height;
+            height = maxHeight;
+          }
         }
-      } else {
-        if (height > maxHeight) {
-          width *= maxHeight / height;
-          height = maxHeight;
-        }
-      }
 
-      // add a canvas, and draw image on it with right dimensions, then export the image
-      const canvas = document.createElement('canvas');
-      canvas.width = width;
-      canvas.height = height;
-      const ctx = canvas.getContext('2d');
+        // add a canvas, and draw image on it with right dimensions, then export the image
+        const canvas = document.createElement('canvas');
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext('2d');
 
-      setTimeout(function(){
-        self.drawImageIOSFix(ctx, img, 0, 0, img.naturalWidth, img.naturalHeight, 0, 0, width, height);
-      }, delay); // gives the UI a chance to get something done.
+        setTimeout(function(){
+          self.drawImageIOSFix(ctx, img, 0, 0, img.naturalWidth, img.naturalHeight, 0, 0, width, height);
+        }, delay); // gives the UI a chance to get something done.
 
-      setTimeout(function(){
-        canvas.toBlob(function(blob){
-          console.log(blob);
-          callback(blob);
-        }, 'image/png');
-      }, delay); // gives the UI a chance to get something done.
-    };
+        setTimeout(function(){
+          canvas.toBlob(function(blob){
+            resolve(blob);
+          }, 'image/png');
+        }, delay); // gives the UI a chance to get something done.
+      };
 
-    img.src = data.result;
+      console.log(data);
+      img.src = data;
+      img.onerror = reject;
+
+    });
   }
 
   /**

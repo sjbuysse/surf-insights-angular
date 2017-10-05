@@ -71,8 +71,11 @@ export class AppComponent implements OnInit{
     this.resizedImage = null;
 
     if (this.extensionAllowed(selectedFile.name)) {
-      // todo readSelectedFile should return a promise, en op resolve zetten we de imagePreview en beginnen we te resizen
-      this.readSelectedFile(selectedFile);
+      this.readSelectedFile(selectedFile)
+        .then((result) => {
+          this.imagePreview = result;
+          this.resizeImage(result).then((resizedImage) => this.resizedImage = resizedImage);
+        });
     } else {
       alert('The file extension is not allowed.\n' +
         'Please try again with a jpg, jpeg, png or bmp file.');
@@ -81,20 +84,25 @@ export class AppComponent implements OnInit{
     }
   }
 
-  private readSelectedFile(selectedFile) {
+  private resizeImage(image): Promise<object> {
+    // reset resized image if still present from last time
+    if (this.resizedImage) {
+      this.resizedImage = null;
+    }
+    // start resizing the image as soon as it is selected
+    return this._imageResizerService.resizeImage(image);
+  }
+
+  private readSelectedFile(selectedFile): Promise<object> {
     // preview images, show upload button, and start resizing image for upload
-    const reader = new FileReader();
-    reader.onload = (event: any) => {
-      this.imagePreview = event.target.result;
-      // reset resized image if still present from last time
-      if (this.resizedImage) {
-        this.resizedImage = null;
-      }
-      // start resizing the image as soon as it is selected
-      this._imageResizerService.resizeImage(event.target, (result) => this.resizedImage = result);
-    };
-    // Read in the image file as a data URL.
-    reader.readAsDataURL(selectedFile);
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = (event: any) => {
+        resolve(event.target.result);
+      };
+      // Read in the image file as a data URL.
+      reader.readAsDataURL(selectedFile);
+    });
   }
 
   private updateSurfspotValues(formValues) {
